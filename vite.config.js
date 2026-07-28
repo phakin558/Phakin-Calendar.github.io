@@ -4,7 +4,7 @@ import path from 'path'
 
 export default defineConfig({
   plugins: [vue()],
-  base: '/MY-KMITL/',
+  base: '/Phakin-Calendar/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
