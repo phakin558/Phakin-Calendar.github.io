@@ -2,14 +2,13 @@ import { defineConfig } from 'vite'
 import path from 'path'
 
 export default defineConfig({
+  base: './',   // 🟢 เพิ่มบรรทัดนี้! ให้อ้างไฟล์แบบ relative ใช้ได้ทั้ง Vercel และ GitHub Pages
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
-      // 🟢 บรรทัดนี้สำคัญมาก! บังคับให้ Vite ดึงตัว Vue Build ที่มี Template Compiler ไปใช้ตอน Deploy
-      'vue': 'vue/dist/vue.esm-bundler.js', 
+      'vue': 'vue/dist/vue.esm-bundler.js',
     },
   },
-  // 🟢 เพิ่มส่วนนี้เพื่ออนุญาตให้สแกน Vue Template ในไฟล์ JS ได้
   define: {
     __VUE_OPTIONS_API__: true,
     __VUE_PROD_DEVTOOLS__: false,
