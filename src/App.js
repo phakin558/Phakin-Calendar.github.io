@@ -169,7 +169,8 @@ export default defineComponent({
   <header>
     <div class="header-inner">
       <h1>🎓 MY KMITL</h1>
-            <div class="header-actions">
+      <div class="header-actions">
+              <div class="header-actions">
         <button class="icon-btn" @click="showThemePanel = !showThemePanel" title="ปรับแต่งธีม">🎨</button>
         <button class="icon-btn" @click="settings.toggleTheme">
           {{ settings.theme === 'dark' ? '☀️' : '🌙' }}
@@ -304,6 +305,7 @@ export default defineComponent({
     </section>
 
     <!-- ============ HOMEWORK ============ -->
+    <!-- ✅ โค้ดใหม่ -->
       <section v-if="activeTab === 'homework'" class="narrow">
 
       <div class="section-header">
