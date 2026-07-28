@@ -4,7 +4,7 @@ import path from 'path'
 
 export default defineConfig({
   plugins: [vue()],
-  base: '/Phakin-Calendar/',
+  base: '/Phakin-Calendar.github.io/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
