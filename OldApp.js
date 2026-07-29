@@ -1,12 +1,8 @@
-import { defineComponent, ref, computed, onMounted, onUnmounted } from 'vue'
+import { defineComponent, ref, computed, onMounted } from 'vue'
 import {
   useSettingsStore, useTimetableStore, useHomeworkStore,
-  loadFromLocal, startAutosave, startDriveSync,
+  loadFromLocal, startAutosave, exportToFile, importFromJSON,
 } from './stores.js'
-import {
-  initGoogleDrive, signIn, signOut, loadFromDrive,
-  onDriveStatusChange, getDriveStatus,
-} from './googleDrive.js'
 
 // ===== Grid config =====
 const GRID_START = 8 * 60      // 08:00
@@ -169,31 +165,21 @@ export default defineComponent({
       return list
     })
 
-    // ===== Google Drive Sync =====
-    const driveStatus = ref(getDriveStatus())
-    let unsubDrive = null
-    let stopDriveSync = null
-
-    async function connectDrive() {
-      try {
-        await signIn()
-        const remote = await loadFromDrive()
-        if (remote) {
-          // มีข้อมูลบน Drive อยู่แล้ว -> ใช้ข้อมูลบน Drive เป็นหลัก
-          if (remote.timetable) timetable.classes = remote.timetable
-          if (remote.homework) homework.tasks = remote.homework
-        } else {
-          // ยังไม่มีไฟล์บน Drive -> อัปโหลดข้อมูลปัจจุบันขึ้นไปเป็นครั้งแรก
-          const { buildExportData } = await import('./stores.js')
-          const { saveToDrive } = await import('./googleDrive.js')
-          await saveToDrive(buildExportData(timetable, homework))
+    // ===== Import / Export =====
+    function handleExport() { exportToFile(timetable, homework) }
+    function handleImport() {
+      const input = document.createElement('input'); input.type = 'file'; input.accept = '.json'
+      input.onchange = e => {
+        const f = e.target.files[0]; if (!f) return
+        const r = new FileReader()
+        r.onload = ev => {
+          try { importFromJSON(ev.target.result, timetable, homework); alert('นำเข้าสำเร็จ!') }
+          catch { alert('ไฟล์ไม่ถูกต้อง') }
         }
-        if (!stopDriveSync) stopDriveSync = startDriveSync(timetable, homework)
-      } catch (e) {
-        alert('เชื่อมต่อ Google Drive ไม่สำเร็จ: ' + (e?.message || e))
+        r.readAsText(f)
       }
+      input.click()
     }
-    function disconnectDrive() { signOut() }
 
     // ===== Helpers =====
     function fmtDate(d) {
@@ -202,23 +188,7 @@ export default defineComponent({
     }
     function isOverdue(d) { return d && new Date(d) < new Date(new Date().toDateString()) }
 
-    onMounted(async () => {
-      loadFromLocal(timetable, homework) // โหลด cache ในเครื่องก่อน ให้เห็นข้อมูลทันที
-      startAutosave(timetable, homework)
-
-      unsubDrive = onDriveStatusChange(s => { driveStatus.value = s })
-      await initGoogleDrive()
-      if (driveStatus.value.signedIn) {
-        // เคยล็อกอินไว้แล้วในเซสชันนี้ -> โหลดข้อมูลล่าสุดจาก Drive มาทับ
-        const remote = await loadFromDrive()
-        if (remote) {
-          if (remote.timetable) timetable.classes = remote.timetable
-          if (remote.homework) homework.tasks = remote.homework
-        }
-        stopDriveSync = startDriveSync(timetable, homework)
-      }
-    })
-    onUnmounted(() => { unsubDrive && unsubDrive(); stopDriveSync && stopDriveSync() })
+    onMounted(() => { loadFromLocal(timetable, homework); startAutosave(timetable, homework) })
 
     return {
       settings, timetable, homework, activeTab, viewMode,
@@ -227,9 +197,8 @@ export default defineComponent({
       showClassForm, editingClassId, cf, submitClass, editClass, cancelCF,
       showTaskForm, editingTaskId, tf, submitTask, editTask, cancelTF,
       subjectOptions, onSubjectChange, hwSort, hwFilter, displayedPending,
-      fmtDate, isOverdue,
+      handleExport, handleImport, fmtDate, isOverdue,
       showThemePanel, PRESETS,
-      driveStatus, connectDrive, disconnectDrive,
     }
   },
 
@@ -244,14 +213,8 @@ export default defineComponent({
         <button class="icon-btn" @click="settings.toggleTheme">
           {{ settings.theme === 'dark' ? '☀️' : '🌙' }}
         </button>
-        <button v-if="!driveStatus.signedIn" class="sm-btn" @click="connectDrive"
-                :disabled="!driveStatus.configured" :title="!driveStatus.configured ? 'ยังไม่ได้ตั้งค่า CLIENT_ID ใน googleDrive.js' : ''">
-          🔗 เชื่อมต่อ Google Drive
-        </button>
-        <button v-else class="sm-btn" @click="disconnectDrive"
-                :title="driveStatus.error || (driveStatus.lastSynced ? 'ซิงค์ล่าสุด: ' + driveStatus.lastSynced.toLocaleTimeString('th-TH') : '')">
-          {{ driveStatus.syncing ? '🔄 กำลังซิงค์...' : (driveStatus.error ? '⚠️ ซิงค์ผิดพลาด' : '☁️ ซิงค์แล้ว') }}
-        </button>
+        <button class="sm-btn" @click="handleExport">📤 Export</button>
+        <button class="sm-btn" @click="handleImport">📥 Import</button>
 
         <div class="theme-panel" v-if="showThemePanel">
           <h4>🎨 สีธีมของเว็บ</h4>
@@ -432,8 +395,10 @@ export default defineComponent({
       <div class="task-section" v-if="displayedPending.length">
         <h3>📌 ยังไม่เสร็จ ({{ displayedPending.length }})</h3>
         <div v-for="t in displayedPending" :key="t.id"
-             class="task-card" :class="{ overdue: isOverdue(t.dueDate) }"
-             :style="{ borderLeftColor: t.color || '#615757' }">
+     class="task-card" :class="{ overdue: isOverdue(t.dueDate) }"
+     :style="{ borderLeftColor: t.color || '#615757', '--task-color': t.color || '#615757' }">
+
+
           <div class="task-check" @click="homework.toggleDone(t.id)">☐</div>
           <div class="task-info">
             <strong>{{ t.title }}</strong>
@@ -452,7 +417,9 @@ export default defineComponent({
 
       <div class="task-section" v-if="homework.completed.length">
         <h3>✅ เสร็จแล้ว ({{ homework.completed.length }})</h3>
-        <div v-for="t in homework.completed" :key="t.id" class="task-card done" :style="{ borderLeftColor: t.color || '#ccc' }">
+        <div v-for="t in homework.completed" :key="t.id" class="task-card done"
+     :style="{ borderLeftColor: t.color || '#ccc', '--task-color': t.color || '#ccc' }">
+     
           <div class="task-check" @click="homework.toggleDone(t.id)">☑</div>
           <div class="task-info"><strong>{{ t.title }}</strong>
             <span class="task-meta"><span v-if="t.subject">📚 {{ t.subject }}</span></span>

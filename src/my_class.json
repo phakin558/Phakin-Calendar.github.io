@@ -1,0 +1,158 @@
+{
+  "version": 2,
+  "exportedAt": "2026-07-29T09:43:40.459Z",
+  "timetable": [
+    {
+      "id": "kmitl001",
+      "subject": "MATH FOR CS (ปฏิบัติ)",
+      "code": "",
+      "day": "อังคาร",
+      "startTime": "08:30",
+      "endTime": "10:30",
+      "room": "[211] จุฬาภรณฯ 2",
+      "color": "#16A34A"
+    },
+    {
+      "id": "kmitl002",
+      "subject": "PROGRAMMING FUN (ทฤษฎี)",
+      "code": "",
+      "day": "อังคาร",
+      "startTime": "10:30",
+      "endTime": "13:00",
+      "room": "[บรรยาย 2] SC02",
+      "color": "#1859C4"
+    },
+    {
+      "id": "kmitl003",
+      "subject": "PROGRAMMING FUN (ปฏิบัติ)",
+      "code": "",
+      "day": "อังคาร",
+      "startTime": "15:00",
+      "endTime": "17:00",
+      "room": "[224] จุฬาภรณฯ 1",
+      "color": "#1E3FAF"
+    },
+    {
+      "id": "kmitl004",
+      "subject": "MATH FOR CS (ทฤษฎี)",
+      "code": "",
+      "day": "พุธ",
+      "startTime": "08:30",
+      "endTime": "10:30",
+      "room": "[318] พระจอมเกล้า",
+      "color": "#16A34A"
+    },
+    {
+      "id": "kmitl005",
+      "subject": "AI-DRIVEN CONCEPTS IN CS (ทฤษฎี)",
+      "code": "",
+      "day": "พุธ",
+      "startTime": "13:00",
+      "endTime": "15:00",
+      "room": "[224] จุฬาภรณฯ 1",
+      "color": "#EF4444"
+    },
+    {
+      "id": "kmitl006",
+      "subject": "AI-DRIVEN CONCEPTS IN CS (ปฏิบัติ)",
+      "code": "",
+      "day": "พุธ",
+      "startTime": "15:00",
+      "endTime": "17:00",
+      "room": "[224] จุฬาภรณฯ 1",
+      "color": "#aa6f64"
+    },
+    {
+      "id": "kmitl007",
+      "subject": "CREATIVE THINKING AND INNOVATION",
+      "code": "",
+      "day": "พฤหัสบดี",
+      "startTime": "09:00",
+      "endTime": "12:00",
+      "room": "[บรรยาย 2] อาคารวิทยาศาสตร์ 2",
+      "color": "#E9A825"
+    },
+    {
+      "id": "kmitl008",
+      "subject": "COMPUTER ETHICS: SOCIAL AND PROFESSIONAL ISSUES",
+      "code": "",
+      "day": "พฤหัสบดี",
+      "startTime": "13:00",
+      "endTime": "16:00",
+      "room": "[323] พระจอมเกล้า",
+      "color": "#E86A9A"
+    },
+    {
+      "id": "kmitl009",
+      "subject": "STATISTICS AND PROBABILITY",
+      "code": "",
+      "day": "ศุกร์",
+      "startTime": "13:00",
+      "endTime": "16:00",
+      "room": "[319] พระจอมเกล้า",
+      "color": "#F97316"
+    },
+    {
+      "id": "kmitl010",
+      "subject": "INTRODUCTION TO ENGLISH COMMUNICATION SKILLS",
+      "code": "",
+      "day": "อาทิตย์",
+      "startTime": "09:00",
+      "endTime": "12:00",
+      "room": "",
+      "color": "#E9A825"
+    }
+  ],
+  "homework": [
+    {
+      "color": "",
+      "id": "ms5s5ylhyxgc",
+      "subject": "COMPUTER ETHICS: SOCIAL AND PROFESSIONAL ISSUES",
+      "title": "ETHICS : (Present) Linus Torvald",
+      "dueDate": "",
+      "notes": "ไม่รู้วัน",
+      "done": false,
+      "createdAt": "2026-07-29T07:45:53.765Z"
+    },
+    {
+      "color": "",
+      "id": "ms5s8k0yzjqh",
+      "subject": "COMPUTER ETHICS: SOCIAL AND PROFESSIONAL ISSUES",
+      "title": "ETHICS : (Make + Present) CaseStudy",
+      "dueDate": "2026-08-05",
+      "notes": "Case Study กรณีศึกษาความผิดทางคอมพิวเตอร์ (พร้อม พรบ. 16 5 6 7 8)",
+      "done": false,
+      "createdAt": "2026-07-29T07:47:54.850Z"
+    },
+    {
+      "color": "",
+      "id": "ms5sbgbwge32",
+      "subject": "CREATIVE THINKING AND INNOVATION",
+      "title": "Creative Thinking : (Make + Present) : ปัญหาในโรงอาหาร",
+      "dueDate": "2026-08-05",
+      "notes": "กลุ่มเป้าหมายคือนักศึกษา",
+      "done": false,
+      "createdAt": "2026-07-29T07:50:10.028Z"
+    },
+    {
+      "color": "",
+      "id": "ms5scprl0xcg",
+      "subject": "COMPUTER ETHICS: SOCIAL AND PROFESSIONAL ISSUES",
+      "title": "Free Certificate",
+      "dueDate": "2026-08-05",
+      "notes": "หา Free Certicicate",
+      "done": false,
+      "createdAt": "2026-07-29T07:51:08.913Z"
+    },
+    {
+      "color": "",
+      "id": "ms5sdz1jzjxm",
+      "subject": "STATISTICS AND PROBABILITY",
+      "title": "STAT : Bayes' Rule แบบฝึกหัด",
+      "dueDate": "2026-08-01",
+      "notes": "",
+      "done": false,
+      "createdAt": "2026-07-29T07:52:07.591Z"
+    }
+  ]
+}

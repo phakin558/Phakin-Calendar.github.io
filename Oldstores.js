@@ -1,6 +1,5 @@
 import { defineStore } from 'pinia'
 import { ref, computed, watch } from 'vue'
-import { saveToDrive } from './googleDrive.js'
 
 // ============ Migration ============
 const DATA_VERSION = 2
@@ -137,21 +136,14 @@ export function importFromJSON(json, tt, hw) {
   if (d.homework) hw.tasks = d.homework
   saveToLocal(tt, hw)
 }
+export function exportToFile(tt, hw) {
+  const blob = new Blob([JSON.stringify(buildExportData(tt, hw), null, 2)], { type: 'application/json' })
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob)
+  a.download = `my-kmitl-backup-${new Date().toISOString().slice(0,10)}.json`
+  a.click(); URL.revokeObjectURL(a.href)
+}
 export function startAutosave(tt, hw, ms = 30000) {
   watch([() => [...tt.classes], () => [...hw.tasks]], () => saveToLocal(tt, hw), { deep: true })
   const timer = setInterval(() => saveToLocal(tt, hw), ms)
   return () => clearInterval(timer)
-}
-
-// ---- ซิงค์ขึ้น Google Drive อัตโนมัติ (debounce กันยิงถี่เกินไปตอนพิมพ์/ลาก) ----
-function debounce(fn, ms) {
-  let timer
-  return (...args) => {
-    clearTimeout(timer)
-    timer = setTimeout(() => fn(...args), ms)
-  }
-}
-export function startDriveSync(tt, hw, ms = 2000) {
-  const debouncedSave = debounce(() => saveToDrive(buildExportData(tt, hw)), ms)
-  return watch([() => [...tt.classes], () => [...hw.tasks]], debouncedSave, { deep: true })
 }
