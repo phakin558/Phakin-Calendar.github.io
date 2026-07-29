@@ -1,12 +1,13 @@
 {
   "name": "my-kmitl",
   "homepage": "https://phakin558.github.io/Phakin-Calendar.github.io",
-  
   "version": "1.0.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "tunnel": "ngrok http 5173 --url=footless-avert-yanking.ngrok-free.dev",
+    "dev:online": "concurrently \"npm run dev\" \"npm run tunnel\"",
     "build": "vite build",
     "preview": "vite preview"
   },
@@ -16,6 +17,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.8",
+    "concurrently": "^10.0.4",
     "gh-pages": "^6.3.0",
     "vite": "^5.0.0"
   }
